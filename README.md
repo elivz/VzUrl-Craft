@@ -22,7 +22,11 @@ Immediately redirects a visitor's browser to the specified URL. Any other code i
 
 ### URL Parts
 
-A helper function, `craft.vzUrl.parse` makes available an array of all the pieces of a URL. The following components are available:
+A helper function, `craft.vzUrl.parse` makes available an array of all the pieces of a URL. Keep in mind that many of these components are likely to be empty for any particular URL. You may also use this to get the components of *any* URL by passing in a string or other variable in place of the field name.
+
+    Domain: {{ craft.vzUrl.parse(entry.fieldName).host }}
+
+The following components are available:
 
 * `scheme` e.g. http
 * `host` e.g. www.google.com
@@ -34,10 +38,6 @@ A helper function, `craft.vzUrl.parse` makes available an array of all the piece
 * `query` (without the question mark)
 * `fragment` (without the hash)
 * `filetype` e.g. pdf
-
-    Domain: {{ craft.vzUrl.parse(entry.fieldName).host }}
-
-Keep in mind that many of these components are likely to be empty for any particular URL. You may also use this to get the components of *any* URL by passing in a string or other variable in place of the field name.
 
 Installation & Updates
 ----------------------
