@@ -13,7 +13,7 @@ class VzUrlPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '0.5';
+        return '0.9';
     }
 
     function getDeveloper()

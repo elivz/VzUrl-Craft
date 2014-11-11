@@ -8,9 +8,36 @@ Please note that VZ URL will not prevent the user from saving their weblog entry
 Template Variables
 ------------------
 
-### `{{ field_name }}`
+### Simple output
 
-Used as a single variable, the VZ URL field will simply output the URL that was entered.
+Just output the URL that was entered.
+
+    <a href="{{ entry.fieldName }}">Link</a>
+
+### Redirect
+
+Immediately redirects a visitor's browser to the specified URL. Any other code in a template containing this tag will never be displayed.
+
+    {% redirect entry.fieldName %}
+
+### URL Parts
+
+A helper function, `craft.vzUrl.parse` makes available an array of all the pieces of a URL. The following components are available:
+
+* `scheme` e.g. http
+* `host` e.g. www.google.com
+* `root` e.g. http://www.google.com
+* `port`
+* `user`
+* `pass`
+* `path` e.g. /about
+* `query` (without the question mark)
+* `fragment` (without the hash)
+* `filetype` e.g. pdf
+
+    Domain: {{ craft.vzUrl.parse(entry.fieldName).host }}
+
+Keep in mind that many of these components are likely to be empty for any particular URL. You may also use this to get the components of *any* URL by passing in a string or other variable in place of the field name.
 
 Installation & Updates
 ----------------------
@@ -23,3 +50,10 @@ Support
 -------
 
 Please post all bugs or feature requests in [GitHub Issues](https://github.com/elivz/VzUrl-Craft/issues). I maintain this fieldtype in my spare time, but I will try to respond to questions as quickly as possible.
+
+Roadmap
+-------
+
+* Cache validation results
+* More output options
+* Retrieve additional information about the webpage (OpenGraph, etc) and make it available in templates

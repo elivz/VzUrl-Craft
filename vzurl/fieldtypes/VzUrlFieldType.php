@@ -38,6 +38,12 @@ class VzUrlFieldType extends BaseFieldType
 
         $settings = $this->getSettings();
 
+        // Default to http://
+        if ( empty($value) )
+        {
+            $value = 'http://';
+        }
+
         $class  = 'vzurl-field';
         $class .= $settings->followRedirects ? ' follow-redirects' : '';
 
