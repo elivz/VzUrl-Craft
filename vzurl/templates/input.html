@@ -1,0 +1,13 @@
+{% import "_includes/forms" as forms %}
+
+{% set config = {
+    id: name,
+    name: name,
+    value: value,
+    class: 'nicetext '~class,
+} %}
+
+<div class="vzurl-wrapper">
+    {{ forms.text(config) }}
+    <div class="vzurl-msg"></div>
+</div>

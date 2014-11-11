@@ -1,0 +1,15 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField({
+    label:        "Show redirects"|t,
+    id:           'followRedirects',
+    name:         'followRedirects',
+    on:           settings.followRedirects
+}) }}
+
+{{ forms.lightswitchField({
+    label:        "Limit to local URLs"|t,
+    id:           'limitLocal',
+    name:         'limitLocal',
+    on:           settings.limitLocal
+}) }}
