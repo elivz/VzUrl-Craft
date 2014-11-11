@@ -3,7 +3,7 @@ VZ URL Fieldtype for Craft
 
 A VZ URL field displays a textbox where the user can enter a URL. It will ping the URL they entered and display an error message if it doesn't find a valid webpage there. It also prompts the user to update URLs that are redirected to a different location.
 
-![Screenshot of VZ URL for Craft](./blob/gh-pages/screenshot.png?raw=true)
+![Screenshot of VZ URL for Craft](../gh-pages/screenshot.png?raw=true)
 
 Please note that VZ URL will not prevent the user from saving their weblog entry if if cannot validate the URL - it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct.
 
