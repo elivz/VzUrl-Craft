@@ -9,7 +9,7 @@
 
     var pluginName = "vzUrl",
         defaults = {
-            delay: 500,
+            delay: 650,
             regex: new RegExp("^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%!&amp;/~\\+#])?$", "gi")
         };
 
@@ -31,43 +31,45 @@
         timer: false,
 
         init: function() {
-            var $field = $(this.element);
+            var vzUrl = this,
+                $field = $(this.element);
 
             // Check URLs whenever the field changes
             $field.on('keyup paste', function(e) {
-                this.checkField($field);
+                vzUrl.checkField($field);
             });
 
             // Check existing URLs when the page loads
-            this.checkField($field, true);
+            vzUrl.checkField($field, true);
         },
 
         /*
          * Event handler for changes to the field
          */
         checkField: function($field, immediate) {
+            var vzUrl = this;
+
             // Clear the timeout
-            if ( ! immediate && this.timer ) {
-                clearTimeout(this.timer);
+            if ( ! immediate && vzUrl.timer ) {
+                clearTimeout(vzUrl.timer);
             }
 
             // Don't bother checking the default value of http://
-            console.log($field);
             if ($field.val() === 'http://' || $field.val() === 'https://' || $field.val() === '') {
-                // this.setStatus($field, 'empty');
+                vzUrl.setStatus($field, 'empty');
                 return;
             } else {
                 // Show the "spinner"
-                this.setStatus($field, 'checking');
+                vzUrl.setStatus($field, 'checking');
             }
 
             // Use a timeout to prevent an ajax call on every keystroke
             if ( ! immediate ) {
-                this.timer = setTimeout(function() {
-                    this.validate($field);
-                }, this.options.delay);
+                vzUrl.timer = setTimeout(function() {
+                    vzUrl.validate($field);
+                }, vzUrl.options.delay);
             } else {
-                this.validate($field);
+                vzUrl.validate($field);
             }
         },
 
@@ -75,35 +77,33 @@
          * Actually send a request the the target URL to see if it exists
          */
         validate: function($field) {
-            return true;
-            var url = this.encodeUri($field.val());
+            var vzUrl = this,
+                url = this.encodeUri($field.val());
 
             // Make sure it's even a valid url
-            if ( ! url.match(this.options.regex) ) {
-                this.setStatus($field, 'invalid');
+            if ( ! url.match(vzUrl.options.regex) ) {
+                vzUrl.setStatus($field, 'invalid');
                 return;
             }
 
             // Ajax call to proxy to check the url
-            var safeUrl = url.replace('^http', ''); // Mod_security doesn't like "http://" in posted data
-            $.getJSON(
-                action + '&callback=?',
-                {
-                    url: safeUrl
-                },
+            var safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
+            Craft.postActionRequest(
+                'vzUrl/validation/check',
+                { url: safeUrl },
                 function (data) {
                     // Make sure the URL we are checking is still there
-                    if ( data.original != this.encodeUri($field.val()) ) return;
+                    if ( data.original !== vzUrl.encodeUri($field.val()) ) return;
 
                     // Show or hide the error message, as needed
-                    if ( (data.original == data.final_url) && (data.http_code >= 200) && (data.http_code < 400) ) {
+                    if ( (data.original === data.final_url) && (data.http_code >= 200) && (data.http_code < 400) ) {
                         // The URL is valid
-                        this.setStatus($field, 'valid');
-                    } else if (data.original != data.final_url) {
+                        vzUrl.setStatus($field, 'valid');
+                    } else if (data.original !== data.final_url) {
                         // The URL is a redirect
-                        this.setStatus($field, 'redirect', data);
+                        vzUrl.setStatus($field, 'redirect', data);
                     } else {
-                        this.setStatus($field, 'invalid');
+                        vzUrl.setStatus($field, 'invalid');
                     }
                 }
             );
@@ -113,7 +113,8 @@
          * Set the styling and error message as needed
          */
         setStatus : function($field, status, response) {
-            var $msg = $field.next().empty();
+            var vzUrl = this,
+                $msg = $field.next().empty();
 
             // Reset field
             $field.removeClass('empty checking invalid valid redirect');
@@ -123,20 +124,20 @@
                 case 'empty' : case 'checking' : case 'valid' :
                     break;
                 case 'invalid' :
-                    $msg.html( Craft.t('That URL appears to be invalid') );
+                    $msg.html( Craft.t('This URL appears to be invalid') );
                     break;
                 case 'redirect' :
-                    if ($field.hasClass('show-redirect')) {
+                    if ($field.hasClass('follow-redirects')) {
                         $msg.html( Craft.t('Redirects to') + ' ' + response.final_url);
                         $('<a/>', {
                             text: Craft.t('Update'),
-                            href: '#',
+                            href: '',
                             click: function(e) {
                                 e.preventDefault();
 
                                 // Replace the field value with the redirect target
                                 $field.val(response.final_url);
-                                this.validate($field);
+                                vzUrl.validate($field);
                             }
                         }).appendTo($msg);
                     } else {
@@ -148,8 +149,8 @@
             $field.addClass(status);
 
             // Add a "Open Page link"
-            if (status === 'valid' || status === 'redirect') {
-                $field.before('<a href="'+$field.val()+'" class="vz-url-visit" target="_blank">' + Craft.t('Open') + '</a>');
+            if (status !== 'empty' && status !== 'checking') {
+                $field.before('<a href="'+$field.val()+'" class="vzurl-visit" target="_blank" title="Open '+$field.val()+' in a new tab">' + Craft.t('Open') + '</a>');
             }
         },
 
