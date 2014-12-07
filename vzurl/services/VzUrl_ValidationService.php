@@ -12,6 +12,17 @@ class VzUrl_ValidationService extends BaseApplicationComponent
             return false;
         }
 
+        // Store the original, so we can pass it back in the response
+        $originalUrl = $url;
+
+        if (substr($url, 0, 1) == '/')
+        {
+            // Local URL, add the current domain
+            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+            $domain = $protocol . "://" . $_SERVER['HTTP_HOST'];
+            $url = $domain . $url;
+        }
+
         try
         {
             // Make the request
@@ -22,8 +33,13 @@ class VzUrl_ValidationService extends BaseApplicationComponent
             $code = $response->getStatusCode();
             $final = $response->getEffectiveUrl();
 
+            if (isset($domain))
+            {
+                $final = str_replace($domain, '', $final);
+            }
+
             return array(
-                'original' => $url,
+                'original'  => $originalUrl,
                 'final_url' => $final,
                 'http_code' => $code
             );

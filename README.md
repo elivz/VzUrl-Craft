@@ -5,7 +5,7 @@ A VZ URL field displays a textbox where the user can enter a URL. It will ping t
 
 ![Screenshot of VZ URL for Craft](../gh-pages/screenshot.png?raw=true)
 
-Please note that VZ URL will not prevent the user from saving their weblog entry if if cannot validate the URL - it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct.
+Please note that VZ URL will not prevent the user from saving their entry if if cannot validate the URL - it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct.
 
 Template Variables
 ------------------
@@ -41,8 +41,8 @@ The following components are available:
 * `fragment` (without the hash)
 * `filetype` e.g. pdf
 
-Installation & Updates
-----------------------
+Installation
+------------
 
 Download and unzip the extension. Upload the `vzurl` folder to your `/craft/plugins/` folder. Go to Settings -> Plugins in the Craft control panel and enable the VZ URL plugin.
 

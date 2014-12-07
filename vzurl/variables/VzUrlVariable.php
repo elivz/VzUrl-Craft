@@ -3,6 +3,12 @@ namespace Craft;
 
 class VzUrlVariable
 {
+    /**
+     * Run PHP's parseurl() on a url, and add in a few extra variables as well
+     *
+     * @param   string  $url    URL to parse
+     * @return  array           The parsed components
+     */
     public function parse($url)
     {
         if ( empty($url) )
