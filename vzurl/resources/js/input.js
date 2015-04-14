@@ -80,6 +80,12 @@
             var vzUrl = this,
                 url = this.encodeUri($field.val());
 
+            // In-page links should always be considered valid
+            if (url.charAt(0) === '#' || url.charAt(0) === '?') {
+                vzUrl.setStatus($field, 'valid');
+                return;
+            }
+
             // Make sure it's even a valid url
             if ( ! url.match(vzUrl.options.regex) ) {
                 vzUrl.setStatus($field, 'invalid');
