@@ -6,22 +6,22 @@ namespace Craft;
  */
 class VzUrlPlugin extends BasePlugin
 {
-    function getName()
+    public function getName()
     {
         return 'VZ URL';
     }
 
-    function getVersion()
+    public function getVersion()
     {
         return '1.0.1';
     }
 
-    function getDeveloper()
+    public function getDeveloper()
     {
         return 'Eli Van Zoeren';
     }
 
-    function getDeveloperUrl()
+    public function getDeveloperUrl()
     {
         return 'http://elivz.com';
     }

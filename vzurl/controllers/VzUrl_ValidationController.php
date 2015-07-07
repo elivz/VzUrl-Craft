@@ -11,8 +11,7 @@ class VzUrl_ValidationController extends BaseController
         $url = str_replace('ht^tp', 'http', craft()->request->getRequiredPost('url'));
         $data = craft()->vzUrl_validation->check($url);
 
-        if ( ! $data )
-        {
+        if (!$data) {
             $data = array(
                 'original' => $url,
                 'final_url' => $url,

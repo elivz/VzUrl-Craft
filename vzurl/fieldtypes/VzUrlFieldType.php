@@ -14,7 +14,7 @@ class VzUrlFieldType extends BaseFieldType
     protected function defineSettings()
     {
         return array(
-            'followRedirects' => array(AttributeType::Bool, 'default' => TRUE),
+            'followRedirects' => array(AttributeType::Bool, 'default' => true)
         );
     }
 
@@ -28,8 +28,8 @@ class VzUrlFieldType extends BaseFieldType
     public function getInputHtml($name, $value)
     {
         // Reformat the input name into something that looks more like an ID
-        $id = craft()->templates->formatInputId($name);
-        $namespacedId = craft()->templates->namespaceInputId($id);
+        $inputId = craft()->templates->formatInputId($name);
+        $namespacedId = craft()->templates->namespaceInputId($inputId);
 
         // Include our Javascript
         craft()->templates->includeCssResource('vzurl/css/input.css');
@@ -42,7 +42,7 @@ class VzUrlFieldType extends BaseFieldType
         $class .= $settings->followRedirects ? ' follow-redirects' : '';
 
         return craft()->templates->render('vzurl/input', array(
-            'id'    => $id,
+            'id'    => $inputId,
             'name'  => $name,
             'value' => $value,
             'class' => $class,
