@@ -7,11 +7,12 @@
 
  ;(function ( $, window, document, undefined ) {
 
-    var pluginName = "vzUrl",
-        defaults = {
-            delay: 650,
-            regex: new RegExp("^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%!&amp;/~\\+#])?$", "gi")
-        };
+    var pluginName = "vzUrl";
+
+    var defaults = {
+        delay: 650,
+        regex: new RegExp("^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%!&amp;/~\\+#])?$", "gi")
+    };
 
 
     // Plugin constructor
@@ -165,8 +166,6 @@
         }
     };
 
-    // A really lightweight plugin wrapper around the constructor,
-    // preventing against multiple instantiations
     $.fn[pluginName] = function ( options ) {
         return this.each(function () {
             if (!$.data(this, "plugin_" + pluginName)) {

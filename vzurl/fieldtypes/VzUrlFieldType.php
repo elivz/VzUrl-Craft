@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * VZ URL field type
  */
-class VzUrlFieldType extends BaseFieldType
+class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
 {
     public function getName()
     {
@@ -53,5 +53,13 @@ class VzUrlFieldType extends BaseFieldType
     {
         // Remove http:// if it's the only thing in the field
         return ($value == 'http://' || $value == 'https://') ? '' : $value;
+    }
+
+    public function getTableAttributeHtml($value)
+    {
+        if ($value)
+        {
+            return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
+        }
     }
 }

@@ -1,0 +1,28 @@
+[
+    {
+        "version": "1.0.0",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.0.zip",
+        "date": "2014-12-07T12:00:00+0000",
+        "notes": [
+            "Initial public release"
+        ]
+    },
+    {
+        "version": "1.0.1",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.1.zip",
+        "date": "2015-07-06T12:00:00+0000",
+        "notes": [
+            "[Improved] Use placeholder for initial value display.",
+            "[Improved] Always mark URLs beginning with `?` or `#` as valid.",
+            "[Improved] Update PHP code to use PSR-2 style."
+        ]
+    },
+    {
+        "version": "1.0.2",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.2.zip",
+        "date": "2015-10-03T12:00:00+0000",
+        "notes": [
+            "[Added] VZ URL fields can now be displayed as a column in the entry index in Craft 2.5."
+        ]
+    }
+]
