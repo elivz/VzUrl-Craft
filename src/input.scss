@@ -1,0 +1,132 @@
+/*
+ *  Styles for VZ Url fieldtype
+ *  by Eli Van Zoeren - http://elivz.com
+ */
+
+.vzurl-wrapper {
+    position: relative;
+
+    // Hide the text behind the spinner or world icon
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 10px;
+        height: 18px;
+        top: 6px;
+        right: 30px;
+        pointer-events: none;
+        background-image: linear-gradient(to right, rgba(255,255,255,0), white);
+    }
+}
+
+.vzurl-field {
+    padding-right: 30px;
+    -webkit-transition: color 0.15s;
+    transition: color 0.15s;
+
+    .empty & {
+        color: #b9bfc6;
+    }
+
+    .checking & {
+        background: #fff url(../../../resources/images/spinner.gif) no-repeat 99% 50%;
+    }
+
+    .invalid &,
+    .redirect & {
+        color: #da5a47;
+    }
+}
+
+.vzurl-msg {
+    opacity: 0;
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    left: 3px;
+    top: 30px;
+    max-width: 100%;
+    padding: 2px 8px;
+    color: #d7d9db;
+    font-size: 11px;
+    white-space: nowrap;
+    background-color: #333f4d;
+    border-radius: 3px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+    transition: all 0.2s ease-in;
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: -5px;
+        width: 0;
+        height: 0;
+        border: 5px solid transparent;
+        border-top: 0;
+        border-bottom: 5px solid #333f4d;
+    }
+
+    .invalid input:focus + &,
+    .redirect input:focus + & {
+        opacity: 1;
+        top: 27px;
+        visibility: visible;
+    }
+
+    a {
+        position: relative;
+        display: inline-block;
+        padding: 2px 8px 2px 5px;
+        margin: -2px -8px -2px 7px;
+        border-left: 1px solid #485861;
+        font-weight: bold;
+        text-decoration: none;
+        color: #fff;
+        border-radius: 0 3px 3px 0;
+
+        &:focus, &:hover {
+            color: #fffff5;
+            background-color: #3b4959;
+            text-shadow: 1px 1px 0 #262e33;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            left: -2px;
+            top: 0;
+            height: 100%;
+            width: 0;
+            border-left: 1px solid #37424a;
+        }
+    }
+}
+
+/* Visit link */
+.vzurl-visit {
+    position: absolute;
+    display: block;
+    right: 0;
+    top: 0;
+    padding: 3px 8px 7px;
+    font-size: 20px;
+    height: 20px;
+    text-align: center;
+    color: #b9bfc6;
+    opacity: 0.75;
+    transition: color 0.15s;
+
+    &:focus, &:hover {
+        color: #29323d;
+    }
+}
+
+@media only screen and (min-device-pixel-ratio: 1.5),
+       only screen and (min-resolution: 1.5dppx) {
+    .vzurl-field.checking {
+        background-image: url(../../../resources/images/spinner_2x.gif);
+        background-size: 20px 20px;
+    }
+}

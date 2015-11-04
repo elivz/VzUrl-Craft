@@ -34,7 +34,7 @@ class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
         // Include our Javascript
         craft()->templates->includeCssResource('vzurl/css/input.css');
         craft()->templates->includeJsResource('vzurl/js/input.js');
-        craft()->templates->includeJs("$('#{$namespacedId}').vzUrl();");
+        craft()->templates->includeJs("new VzUrl($('#{$namespacedId}'));");
 
         $settings = $this->getSettings();
 
