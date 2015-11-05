@@ -1,6 +1,8 @@
 VZ URL Fieldtype for Craft
 ==========================
 
+**Version 1.0.2 requires Craft 2.5 (currently in beta). For Craft <= 2.4 compatibility, please download [version 1.0.1](https://github.com/elivz/VzUrl-Craft/archive/1.0.1.zip).**
+
 A VZ URL field displays a textbox where the user can enter a URL. It will ping the URL they entered and display an error message if it doesn't find a valid webpage there. It also prompts the user to update URLs that are redirected to a different location.
 
 ![Screenshot of VZ URL for Craft](../gh-pages/screenshot.png?raw=true)
