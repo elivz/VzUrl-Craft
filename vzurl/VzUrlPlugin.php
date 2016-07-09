@@ -13,7 +13,7 @@ class VzUrlPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.1.0';
+        return '1.0.2';
     }
 
     public function getSchemaVersion()
@@ -38,6 +38,6 @@ class VzUrlPlugin extends BasePlugin
 
     public function getReleaseFeedUrl()
     {
-        return 'https://github.com/elivz/VzUrl-Craft/blob/master/changelog.json';
+        return 'https://raw.githubusercontent.com/elivz/VzUrl-Craft/master/changelog.json';
     }
 }
