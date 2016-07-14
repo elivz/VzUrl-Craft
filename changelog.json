@@ -24,7 +24,7 @@
         "notes": [
             "[Added] VZ URL fields can now be displayed as a column in the entry index in Craft 2.5."
         ]
-    }
+    },
     {
         "version": "1.0.3",
         "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.3.zip",
