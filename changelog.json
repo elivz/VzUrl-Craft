@@ -36,7 +36,7 @@
     },
     {
         "version": "1.0.4",
-        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.3.zip",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.4.zip",
         "date": "2017-02-03T09:00:00+00:00",
         "notes": [
             "[Fixed] Minor styling issues with URL input & redirect message.",
