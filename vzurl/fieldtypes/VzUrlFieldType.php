@@ -46,6 +46,13 @@ class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
         $class  = 'vzurl-field';
         $class .= $settings->followRedirects ? ' follow-redirects' : '';
 
+        craft()->templates->includeTranslations(
+            'Redirects to',
+            'This URL appears to be invalid',
+            'Update',
+            'Visit URL'
+        );
+
         return craft()->templates->render('vzurl/input', array(
             'id'    => $inputId,
             'name'  => $name,
