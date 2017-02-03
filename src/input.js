@@ -6,10 +6,6 @@
  */
 
 (($, Craft, window) => {
-    function encodeUri(str) {
-        return encodeURI(str).replace(/%25/g, '%').replace(/%5B/g, '[').replace(/%5D/g, ']');
-    }
-
     function VzUrl($field) {
         this.timer = false;
         this.delay = 500;
@@ -73,7 +69,7 @@
         const safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
         Craft.postActionRequest(
                 'vzUrl/validation/check',
-                { url: safeUrl }
+                { url: safeUrl },
             )
             .done((data) => {
                 // Make sure the URL we are checking is still there
@@ -116,7 +112,7 @@
         } else if (status === 'redirect') {
             if (this.$field.hasClass('follow-redirects')) {
                 this.$wrapper.addClass('warning');
-                this.$msg.text(`${Craft.t('Redirects to')} ${response.final_url} `);
+                this.$msg.html(`<span>${Craft.t('Redirects to')} ${response.final_url}</span> `);
                 $('<a/>', {
                     text: Craft.t('Update'),
                     click: (event) => {

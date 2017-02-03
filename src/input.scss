@@ -20,7 +20,7 @@
     }
 }
 
-.vzurl-field {
+input.text.vzurl-field {
     padding-right: 30px;
     -webkit-transition: color 0.15s;
     transition: color 0.15s;
@@ -46,7 +46,6 @@
     z-index: 100;
     left: 3px;
     top: 30px;
-    max-width: 100%;
     padding: 2px 8px;
     color: #d7d9db;
     font-size: 11px;
@@ -73,6 +72,14 @@
         opacity: 1;
         top: 27px;
         visibility: visible;
+    }
+
+    span {
+        display: inline-block;
+        max-width: 40em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     a {

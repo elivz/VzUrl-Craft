@@ -21,14 +21,14 @@ var autoprefixerOpts = [
 //***********************************************
 
 var autoprefixer = require('gulp-autoprefixer');
-var minify = require('gulp-minify-css');
+var cssnano = require('gulp-cssnano');
 var sass = require('gulp-sass');
 
 gulp.task('styles', function() {
     return gulp.src('src/*.scss')
         .pipe(sass())
         .pipe(autoprefixer({ browsers: autoprefixerOpts, sourceMap: false }))
-        .pipe(minify({compatibility: 'ie8'}))
+        .pipe(cssnano())
         .pipe(gulp.dest(root+'css'));
 });
 

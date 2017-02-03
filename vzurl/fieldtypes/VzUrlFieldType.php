@@ -11,6 +11,11 @@ class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
         return Craft::t('URL');
     }
 
+    public function defineContentAttribute()
+    {
+        return array(AttributeType::String, 'maxLength' => 2000);
+    }
+
     protected function defineSettings()
     {
         return array(
