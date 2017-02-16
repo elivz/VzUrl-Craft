@@ -42,5 +42,13 @@
             "[Fixed] Minor styling issues with URL input & redirect message.",
             "[Improved] Increased character limit in database to 2000 to prevent issues with longer URLs."
         ]
+    },
+    {
+        "version": "1.0.5",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.0.5.zip",
+        "date": "2017-02-16T10:00:00+00:00",
+        "notes": [
+            "[Fixed] Change column type to TEXT to avoid MySQL row limit."
+        ]
     }
 ]

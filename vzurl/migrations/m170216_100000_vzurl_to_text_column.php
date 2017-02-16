@@ -5,7 +5,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m170102_220000_vzurl_increase_character_limit extends BaseMigration
+class m170216_100000_vzurl_to_text_column extends BaseMigration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
@@ -27,8 +27,7 @@ class m170102_220000_vzurl_increase_character_limit extends BaseMigration
         {
             $fieldName = 'field_' . $field['handle'];
             $this->alterColumn('content', $fieldName, array(
-                'column' => ColumnType::Varchar,
-                'maxLength' => 2000
+                'column' => ColumnType::Text
             ));
         }
 
