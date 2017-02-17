@@ -20,7 +20,7 @@ class m170216_100000_vzurl_to_text_column extends BaseMigration
         $fields = craft()->db->createCommand()
             ->select('handle')
             ->from('fields')
-            ->where(array('type' => 'VzUrl'))
+            ->where(array('type' => 'VzUrl', 'context' => 'global'))
             ->queryAll();
 
         foreach ($fields as $field)
