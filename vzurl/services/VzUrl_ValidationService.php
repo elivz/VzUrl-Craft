@@ -25,7 +25,7 @@ class VzUrl_ValidationService extends BaseApplicationComponent
         try {
             // Make the request
             $client = new Client();
-            $response = $client->head($url)->send();
+            $response = $client->get($url)->send();
 
             // Get the data we need
             $code = $response->getStatusCode();

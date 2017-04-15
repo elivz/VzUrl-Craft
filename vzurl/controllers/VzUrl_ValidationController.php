@@ -7,8 +7,6 @@ class VzUrl_ValidationController extends BaseController
     {
         $this->requireAjaxRequest();
 
-        $time_start = microtime(true);
-
         // Validate the URL
         $url = str_replace('ht^tp', 'http', craft()->request->getRequiredPost('url'));
         $data = craft()->vzUrl_validation->check($url);
@@ -20,9 +18,6 @@ class VzUrl_ValidationController extends BaseController
                 'http_code' => 0
             );
         }
-
-        $time_end = microtime(true);
-        $data['response_time'] = $time_end - $time_start;
 
         $this->returnJson($data);
     }

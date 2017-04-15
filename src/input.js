@@ -2,10 +2,12 @@
  * Ajax link validator for VZ URL fieldtype
  * by Eli Van Zoeren - http://elivz.com
  *
- * Depends on: jQuery
+ * Depends on: jQuery, Craft
  */
 
 (($, Craft, window) => {
+    const urlCache = {};
+
     function VzUrl($field) {
         this.timer = false;
         this.delay = 500;
@@ -25,6 +27,11 @@
         this.checkField(true);
     }
 
+    VzUrl.prototype.queueAjax = (() => {
+        let previous = new $.Deferred().resolve();
+        return fn => previous = previous.then(fn);
+    })();
+
     VzUrl.prototype.checkField = function checkField(immediate) {
         // Clear the timeout
         if (this.timer) {
@@ -33,8 +40,12 @@
 
         // Don't bother checking if it's empty
         if (this.$field.val() === '') {
+            this.setStatus({ status: 'empty' });
             return;
         }
+
+        // Show the "spinner"
+        this.setStatus({ status: 'checking' });
 
         // Use a timeout to prevent an ajax call on every keystroke
         if (!immediate) {
@@ -49,56 +60,66 @@
      */
     VzUrl.prototype.validate = function validate() {
         const url = this.$field.val();
+        let data = {};
 
-        // Show the "spinner"
-        this.setStatus('checking');
+        if (url in urlCache) {
+            // Use the cached data
+            data = urlCache[url];
+        } else if (url.charAt(0) === '#' || url.charAt(0) === '?') {
+            // In-page links should always be considered valid
+            data.status = 'valid';
+        } else if (!url.match(this.regex)) {
+            // That's not even a real URL
+            data.status = 'invalid';
+        } else {
+            // Ajax call to proxy to check the url
+            this.queueAjax(() => {
+                const safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
+                return Craft.postActionRequest('vzUrl/validation/check', {
+                    url: safeUrl,
+                })
+                    .done(response => {
+                        // Make sure the URL we are checking is still there
+                        if (response.original !== this.$field.val()) {
+                            return;
+                        }
 
-        // In-page links should always be considered valid
-        if (url.charAt(0) === '#' || url.charAt(0) === '?') {
-            this.setStatus('valid');
-            return;
-        }
-
-        // Make sure it's even a valid url
-        if (!url.match(this.regex)) {
-            this.setStatus('invalid');
-            return;
-        }
-
-        // Ajax call to proxy to check the url
-        const safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
-        Craft.postActionRequest(
-                'vzUrl/validation/check',
-                { url: safeUrl },
-            )
-            .done((data) => {
-                // Make sure the URL we are checking is still there
-                if (data.original !== this.$field.val()) {
-                    return;
-                }
-
-                // Show or hide the error message, as needed
-                if (data.http_code >= 200 && data.http_code < 400) {
-                    if (data.original === data.final_url) {
-                        // The URL is valid
-                        this.setStatus('valid');
-                    } else {
-                        // The URL is a redirect
-                        this.setStatus('redirect', data);
-                    }
-                } else {
-                    this.setStatus('invalid');
-                }
-            })
-            .fail(() => {
-                this.setStatus('invalid');
+                        // Show or hide the error message, as needed
+                        if (
+                            response.http_code >= 200 &&
+                            response.http_code < 400
+                        ) {
+                            if (response.original === response.final_url) {
+                                // The URL is valid
+                                data.status = 'valid';
+                            } else {
+                                // The URL is a redirect
+                                data.status = 'redirect';
+                                data.redirect = response.final_url;
+                            }
+                        } else {
+                            data.status = 'invalid';
+                        }
+                    })
+                    .fail(() => {
+                        data.status = 'invalid';
+                    })
+                    .always(() => {
+                        this.setStatus(data);
+                        urlCache[url] = data;
+                    });
             });
+        }
+
+        if ('status' in data) {
+            this.setStatus(data);
+        }
     };
 
     /*
      * Set the styling and error message as needed
      */
-    VzUrl.prototype.setStatus = function setStatus(status, response) {
+    VzUrl.prototype.setStatus = function setStatus(data) {
         // Reset field
         this.$field.prev().remove();
         this.$wrapper.removeClass('empty checking invalid valid redirect');
@@ -106,31 +127,37 @@
         // Reset message
         this.$msg.empty();
 
-        if (status === 'invalid') {
+        if (data.status === 'empty') {
+            return;
+        }
+
+        if (data.status === 'invalid') {
             this.$msg.text(Craft.t('This URL appears to be invalid'));
             this.$wrapper.addClass('invalid');
-        } else if (status === 'redirect') {
+        } else if (data.status === 'redirect') {
             if (this.$field.hasClass('follow-redirects')) {
                 this.$wrapper.addClass('warning');
-                this.$msg.html(`<span>${Craft.t('Redirects to')} ${response.final_url}</span> `);
+                this.$msg.html(
+                    `<span>${Craft.t('Redirects to')} ${data.redirect}</span>`
+                );
                 $('<a/>', {
                     text: Craft.t('Update'),
-                    click: (event) => {
+                    click: event => {
                         // Replace the field value with the redirect target
-                        this.$field.val(response.final_url);
+                        this.$field.val(data.redirect);
                         this.validate(this.$field);
                         event.preventDefault();
                     },
                 }).appendTo(this.$msg);
             } else {
-                status = 'valid';
+                data.status = 'valid';
             }
         }
 
-        this.$wrapper.addClass(status);
+        this.$wrapper.addClass(data.status);
 
         // Add a "Open Page link"
-        if (status !== 'empty' && status !== 'checking') {
+        if (data.status !== 'empty' && data.status !== 'checking') {
             const $visitLink = $('<a/>', {
                 href: this.$field.val(),
                 class: 'vzurl-visit',

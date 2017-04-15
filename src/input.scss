@@ -16,7 +16,7 @@
         top: 6px;
         right: 30px;
         pointer-events: none;
-        background-image: linear-gradient(to right, rgba(255,255,255,0), white);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0), white);
     }
 }
 
@@ -52,7 +52,7 @@ input.text.vzurl-field {
     white-space: nowrap;
     background-color: #333f4d;
     border-radius: 3px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease-in;
 
     &:before {
@@ -75,7 +75,6 @@ input.text.vzurl-field {
     }
 
     span {
-        display: inline-block;
         max-width: 40em;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -93,7 +92,8 @@ input.text.vzurl-field {
         color: #fff;
         border-radius: 0 3px 3px 0;
 
-        &:focus, &:hover {
+        &:focus,
+        &:hover {
             color: #fffff5;
             background-color: #3b4959;
             text-shadow: 1px 1px 0 #262e33;
@@ -125,13 +125,13 @@ input.text.vzurl-field {
     opacity: 0.75;
     transition: color 0.15s;
 
-    &:focus, &:hover {
+    &:focus,
+    &:hover {
         color: #29323d;
     }
 }
 
-@media only screen and (min-device-pixel-ratio: 1.5),
-       only screen and (min-resolution: 1.5dppx) {
+@media only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .vzurl-field.checking {
         background-image: url(../../../resources/images/spinner_2x.gif);
         background-size: 20px 20px;

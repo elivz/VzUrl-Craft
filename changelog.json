@@ -50,5 +50,15 @@
         "notes": [
             "[Fixed] Change column type to TEXT to avoid MySQL row limit."
         ]
+    },
+    {
+        "version": "1.1.0",
+        "downloadUrl": "https://github.com/elivz/VzUrl-Craft/archive/1.1.0.zip",
+        "date": "2017-04-15T09:00:00+00:00",
+        "notes": [
+            "[Improved] Refactored Javascript to check fields sequentially rather than simultaneously. On entries with a lot of URL fields, this should prevent the browser from locking up.",
+            "[Improved] Cache URL validity in the browser so multiple copies of the same URL on a page won't require multiple server calls.",
+            "[Improved] Now uses a GET rather than HEAD request to check URLs, as some servers don't respond correctly to HEAD requests."
+        ]
     }
 ]
