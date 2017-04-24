@@ -13,7 +13,7 @@ class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
 
     public function defineContentAttribute()
     {
-        return array(AttributeType::String, 'maxLength' => 2000);
+        return array(AttributeType::Text);
     }
 
     protected function defineSettings()
