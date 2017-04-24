@@ -13,7 +13,7 @@ class VzUrlFieldType extends BaseFieldType implements IPreviewableFieldType
 
     public function defineContentAttribute()
     {
-        return array(AttributeType::Text);
+        return array(AttributeType::String, 'column' => ColumnType::Text);
     }
 
     protected function defineSettings()
