@@ -25,7 +25,17 @@ class VzUrl_ValidationService extends BaseApplicationComponent
         try {
             // Make the request
             $client = new Client();
-            $response = $client->get($url)->send();
+            $client->setUserAgent('VzUrl/1.0 (CraftCMS)');
+            $request = $client->get($url, null, array(
+                'headers' => array(
+                    'Accept' => 'text/html,*/*',
+                    'Cache-Control' => 'no-cache',
+                ),
+                'timeout' => 10,
+                'connect_timeout' => 2,
+                'verify' => false,
+            ));
+            $response = $request->send();
 
             // Get the data we need
             $code = $response->getStatusCode();
