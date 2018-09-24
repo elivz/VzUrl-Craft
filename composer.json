@@ -1,0 +1,43 @@
+{
+  "name": "elivz/vzurl",
+  "description": "A URL fieldtype with validation.",
+  "type": "craft-plugin",
+  "version": "2.0.0",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "vz url"
+  ],
+  "support": {
+    "docs": "https://github.com/elivz/VzUrl-Craft/blob/master/README.md",
+    "issues": "https://github.com/elivz/VzUrl-Craft/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Eli Van Zoeren",
+      "homepage": "https://github.com/elivz"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0.0-RC1"
+  },
+  "autoload": {
+    "psr-4": {
+      "elivz\\vzurl\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "VZ URL",
+    "handle": "vzurl",
+    "hasCpSettings": false,
+    "hasCpSection": false,
+    "changelogUrl": "https://raw.githubusercontent.com/elivz/VzUrl-Craft/master/CHANGELOG.md",
+    "components": {
+      "vzUrlService": "elivz\\vzurl\\services\\VzUrlService"
+    },
+    "class": "elivz\\vzurl\\VzUrl"
+  }
+}

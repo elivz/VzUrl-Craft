@@ -1,0 +1,23 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * VZ URL plugin for Craft CMS
+ *
+ * VzUrlField Field Settings
+ *
+ * @author    Eli Van Zoeren
+ * @copyright Copyright (c) 2018 Eli Van Zoeren
+ * @link      https://github.com/elivz
+ * @package   VzUrl
+ * @since     2.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField({
+    label:        'Show redirects'|t,
+    id:           'followRedirects',
+    name:         'followRedirects',
+    on:           field['followRedirects']
+}) }}

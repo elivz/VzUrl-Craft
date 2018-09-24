@@ -1,6 +1,7 @@
 {
-  "name": "vz-url-craft",
-  "version": "1.1.0",
+  "name": "VzUrl-Craft",
+  "description": "URL fieldtype for the Craft content management system.",
+  "version": "2.0.0",
   "author": "Eli Van Zoeren <eli@elivz.com>",
   "homepage": "https://elivz.com/",
   "license": "MIT",
@@ -8,41 +9,46 @@
     "type": "git",
     "url": "git@github.com:elivz/VzUrl-Craft.git"
   },
-  "engines": {
-    "node": ">= 4.0.0"
+  "scripts": {
+    "dev": "webpack --mode development --watch --progress --hide-modules",
+    "build": "webpack --mode production --progress --hide-modules"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.2",
-    "babel-preset-es2015": "^6.24.1",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.1.3",
-    "eslint-plugin-import": "^2.0.1",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "~3.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-eslint": "^3.0.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^2.1.2"
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "autoprefixer": "^9.1.5",
+    "babel-loader": "^8.0.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^1.0.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-custom-properties": "^8.0.5",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.1.0",
+    "style-loader": "^0.23.0",
+    "svg-url-loader": "^2.3.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1"
+  },
+  "target": {
+    "browsers": [
+      "> 0.25% in US",
+      "> 2%"
+    ]
   },
   "babel": {
     "presets": [
-      "es2015"
+      [
+        "@babel/env"
+      ]
     ]
   },
-  "eslintConfig": {
-    "extends": "airbnb-base",
-    "env": {
-      "browser": true
-    },
-    "rules": {
-      "import/extensions": 0,
-      "import/no-extraneous-dependencies": 0,
-      "import/no-unresolved": 0,
-      "indent": [
-        2,
-        4
-      ]
-    }
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }

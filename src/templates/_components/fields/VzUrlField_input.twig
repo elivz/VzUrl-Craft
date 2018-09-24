@@ -1,0 +1,29 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * VZ URL plugin for Craft CMS 3.x
+ *
+ * VzUrl Field Input
+ *
+ * @author    Eli Van Zoeren
+ * @copyright Copyright (c) 2018 Eli Van Zoeren
+ * @link      https://github.com/elivz
+ * @package   VzUrl
+ * @since     2.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("elivz\\vzurl\\assetbundles\\vzurlfield\\VzUrlFieldAsset") %}
+
+<div class="vzurl-wrapper">
+    {{ forms.textField({
+        id: name,
+        name: name,
+        value: value,
+        class: class,
+        placeholder: 'http://'
+    }) }}
+    <div class="vzurl-msg"></div>
+</div>
