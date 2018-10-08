@@ -33,9 +33,10 @@ class ValidationController extends Controller
      *
      * @return array
      */
-    public function actionIndex()
+    public function actionCheck()
     {
-        $this->requireAjaxRequest();
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
 
         // Validate the URL
         $url = str_replace('ht^tp', 'http', craft()->request->getRequiredPost('url'));
@@ -49,6 +50,6 @@ class ValidationController extends Controller
             );
         }
 
-        $this->returnJson($data);
+        $this->asJson($data);
     }
 }

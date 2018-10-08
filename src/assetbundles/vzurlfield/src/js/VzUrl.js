@@ -10,7 +10,9 @@
  * @since     2.0.0VzUrlVzUrlField
  */
 
-import style from '../css/VzUrlField.css';
+import { debounce } from 'throttle-debounce';
+import urlTest from 'url-regex';
+import '../css/VzUrl.css';
 
 /*
  * Ajax link validator for VZ URL fieldtype
@@ -19,39 +21,34 @@ import style from '../css/VzUrlField.css';
  * Depends on: jQuery, Craft
  */
 
-(($, Craft, window) => {
-  const urlCache = {};
+const urlCache = {};
+const delay = 500;
 
-  function VzUrl(field) {
-    this.timer = false;
-    this.delay = 500;
-    this.regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-
+class VzUrl {
+  constructor(field) {
     // Store elements we will work with
     this.$field = $(`#${field}`);
     this.$wrapper = this.$field.parent();
     this.$msg = this.$field.next();
 
     // Check URLs whenever the field changes
-    this.$field.on('keyup paste', () => {
-      this.checkField();
-    });
+    this.$field.on('keyup paste', this.checkField.bind(this));
+
+    // Store the debounced validation function
+    this.validate = debounce(delay, this._validate.bind(this));
 
     // Check existing URLs when the page loads
-    this.checkField(true);
+    this.checkField();
   }
 
-  VzUrl.prototype.queueAjax = (() => {
-    let previous = new $.Deferred().resolve();
-    return fn => (previous = previous.then(fn));
-  })();
+  queueAjax() {
+    return (() => {
+      let previous = new $.Deferred().resolve();
+      return fn => (previous = previous.then(fn));
+    })();
+  }
 
-  VzUrl.prototype.checkField = function checkField(immediate) {
-    // Clear the timeout
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-
+  checkField() {
     // Don't bother checking if it's empty
     if (this.$field.val() === '') {
       this.setStatus({ status: 'empty' });
@@ -61,20 +58,20 @@ import style from '../css/VzUrlField.css';
     // Show the "spinner"
     this.setStatus({ status: 'checking' });
 
-    // Use a timeout to prevent an ajax call on every keystroke
-    if (!immediate) {
-      this.timer = setTimeout($.proxy(this.validate, this), this.delay);
-    } else {
-      this.validate(this.$field);
-    }
-  };
+    this.validate(this.$field);
+  }
 
   /*
-     * Actually send a request the the target URL to see if it exists
-     */
-  VzUrl.prototype.validate = function validate() {
-    const url = this.$field.val();
+   * Actually send a request the the target URL to see if it exists
+   */
+  _validate() {
+    let url = this.$field.val();
     let data = {};
+
+    // Prepend site baseUrl to relative URIs
+    if (url.charAt(0) === '/') {
+      url = Craft.baseUrl.replace(/^(.+?)\/*?$/, '$1') + url;
+    }
 
     if (url in urlCache) {
       // Use the cached data
@@ -82,14 +79,14 @@ import style from '../css/VzUrlField.css';
     } else if (url.charAt(0) === '#' || url.charAt(0) === '?') {
       // In-page links should always be considered valid
       data.status = 'valid';
-    } else if (!url.match(this.regex)) {
+    } else if (!urlTest({ exact: true }).test(url)) {
       // That's not even a real URL
       data.status = 'invalid';
     } else {
       // Ajax call to proxy to check the url
       this.queueAjax(() => {
         const safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
-        return Craft.postActionRequest('vzUrl/validation/check', {
+        return Craft.postActionRequest('vzurl/validation/check', {
           url: safeUrl,
         })
           .done(response => {
@@ -125,15 +122,15 @@ import style from '../css/VzUrlField.css';
     if ('status' in data) {
       this.setStatus(data);
     }
-  };
+  }
 
   /*
-     * Set the styling and error message as needed
-     */
-  VzUrl.prototype.setStatus = function setStatus(data) {
+   * Set the styling and error message as needed
+   */
+  setStatus(data) {
     // Reset field
     this.$field.prev().remove();
-    this.$wrapper.removeClass('empty checking errors valid invalid redirect');
+    this.$wrapper.removeClass('errors checking');
 
     // Reset message
     this.$msg.empty();
@@ -163,9 +160,9 @@ import style from '../css/VzUrlField.css';
       } else {
         data.status = 'valid';
       }
+    } else if (data.status === 'checking') {
+      this.$wrapper.addClass('checking');
     }
-
-    this.$wrapper.addClass(data.status);
 
     // Add a "Open Page link"
     if (data.status !== 'empty' && data.status !== 'checking') {
@@ -173,13 +170,11 @@ import style from '../css/VzUrlField.css';
         href: this.$field.val(),
         class: 'vzurl-visit',
         target: '_blank',
-        'data-icon': 'world',
         title: `${Craft.t('Visit URL')}: ${this.$field.val()}`,
       });
       this.$field.before($visitLink);
     }
-  };
+  }
+}
 
-  // Export the main function
-  window.VzUrl = VzUrl;
-})(window.jQuery, window.Craft, window);
+window.VzUrl = VzUrl;

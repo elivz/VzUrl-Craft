@@ -11,22 +11,14 @@ const distPath = path.join(assetPath, 'dist');
 
 module.exports = {
   entry: {
-    VzUrl: path.resolve(srcPath, 'js/VzUrlField.js'),
+    VzUrl: path.resolve(srcPath, 'js/VzUrl.js'),
   },
   output: {
     path: distPath,
     publicPath: '/cpresources/vzurl/',
     filename: '[name].js',
   },
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-      }),
-      new OptimizeCSSAssetsPlugin(),
-    ],
-  },
+  devtool: devMode ? 'inline-source-map' : false,
   plugins: [
     new CleanWebpackPlugin(distPath),
     new MiniCssExtractPlugin({
