@@ -24,7 +24,6 @@ use craft\web\Controller;
  */
 class ValidationController extends Controller
 {
-
     // Public Methods
     // =========================================================================
 
@@ -39,17 +38,17 @@ class ValidationController extends Controller
         $this->requireAcceptsJson();
 
         // Validate the URL
-        $url = str_replace('ht^tp', 'http', craft()->request->getRequiredPost('url'));
-        $data = craft()->vzUrl_validation->check($url);
+        $url = Craft::$app->getRequest()->getRequiredBodyParam('url');
+        $data = VzUrl::getInstance()->validation->check($url);
 
         if (!$data) {
-            $data = array(
+            $data = [
                 'original' => $url,
                 'final_url' => $url,
                 'http_code' => 0
-            );
+            ];
         }
 
-        $this->asJson($data);
+        return $this->asJson($data);
     }
 }

@@ -22,6 +22,10 @@
  */
 return [
     'VZ URL plugin loaded' => 'VZ URL plugin loaded',
-
     'Show redirects' => 'Show redirects',
+
+    'This URL appears to be invalid' => 'This URL appears to be invalid',
+    'Redirects to' => 'Redirects to',
+    'Update' => 'Update',
+    'Visit URL' => 'Visit URL',
 ];

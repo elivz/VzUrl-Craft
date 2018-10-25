@@ -20,6 +20,7 @@ use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
 use craft\fields\Url;
+use craft\web\View;
 
 /**
  * VzUrl Field
@@ -83,6 +84,16 @@ class VzUrlField extends Url
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+        // Register translatable strings
+        Craft::$app->getView()->registerTranslations(
+            'vzurl', [
+            'This URL appears to be invalid',
+            'Redirects to',
+            'Update',
+            'Visit URL',
+            ]
+        );
+        
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(VzUrlFieldAsset::class);
 

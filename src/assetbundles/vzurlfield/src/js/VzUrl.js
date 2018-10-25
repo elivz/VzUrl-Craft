@@ -28,8 +28,8 @@ class VzUrl {
   constructor(field) {
     // Store elements we will work with
     this.$field = $(`#${field}`);
-    this.$wrapper = this.$field.parent();
-    this.$msg = this.$field.next();
+    this.$wrapper = this.$field.closest('.vzurl-wrapper');
+    this.$msg = this.$wrapper.find('.vzurl-msg');
 
     // Check URLs whenever the field changes
     this.$field.on('keyup paste', this.checkField.bind(this));
@@ -37,15 +37,13 @@ class VzUrl {
     // Store the debounced validation function
     this.validate = debounce(delay, this._validate.bind(this));
 
-    // Check existing URLs when the page loads
-    this.checkField();
-  }
-
-  queueAjax() {
-    return (() => {
+    this.queueAjax = (() => {
       let previous = new $.Deferred().resolve();
       return fn => (previous = previous.then(fn));
     })();
+
+    // Check existing URLs when the page loads
+    this.checkField();
   }
 
   checkField() {
@@ -84,12 +82,13 @@ class VzUrl {
       data.status = 'invalid';
     } else {
       // Ajax call to proxy to check the url
-      this.queueAjax(() => {
-        const safeUrl = url.replace('http', 'ht^tp'); // Mod_security doesn't like "http://" in posted data
-        return Craft.postActionRequest('vzurl/validation/check', {
-          url: safeUrl,
-        })
-          .done(response => {
+      return Craft.postActionRequest(
+        'vzurl/validation/check',
+        {
+          url,
+        },
+        (response, textStatus) => {
+          if (textStatus === 'success') {
             // Make sure the URL we are checking is still there
             if (response.original !== this.$field.val()) {
               return;
@@ -108,15 +107,14 @@ class VzUrl {
             } else {
               data.status = 'invalid';
             }
-          })
-          .fail(() => {
+          } else {
             data.status = 'invalid';
-          })
-          .always(() => {
-            this.setStatus(data);
-            urlCache[url] = data;
-          });
-      });
+          }
+
+          this.setStatus(data);
+          urlCache[url] = data;
+        }
+      );
     }
 
     if ('status' in data) {
@@ -130,7 +128,7 @@ class VzUrl {
   setStatus(data) {
     // Reset field
     this.$field.prev().remove();
-    this.$wrapper.removeClass('errors checking');
+    this.$wrapper.removeClass('errors redirect checking');
 
     // Reset message
     this.$msg.empty();
@@ -140,16 +138,16 @@ class VzUrl {
     }
 
     if (data.status === 'invalid') {
-      this.$msg.text(Craft.t('This URL appears to be invalid'));
+      this.$msg.text(Craft.t('vzurl', 'This URL appears to be invalid'));
       this.$wrapper.addClass('errors');
     } else if (data.status === 'redirect') {
       if (this.$field.hasClass('follow-redirects')) {
-        this.$wrapper.addClass('errors');
+        this.$wrapper.addClass('errors redirect');
         this.$msg.html(
-          `<span>${Craft.t('Redirects to')} ${data.redirect}</span>`
+          `<span>${Craft.t('vzurl', 'Redirects to')} ${data.redirect}</span>`
         );
         $('<a/>', {
-          text: Craft.t('Update'),
+          text: Craft.t('vzurl', 'Update'),
           click: event => {
             // Replace the field value with the redirect target
             this.$field.val(data.redirect);
@@ -170,7 +168,7 @@ class VzUrl {
         href: this.$field.val(),
         class: 'vzurl-visit',
         target: '_blank',
-        title: `${Craft.t('Visit URL')}: ${this.$field.val()}`,
+        title: `${Craft.t('vzurl', 'Visit URL')}: ${this.$field.val()}`,
       });
       this.$field.before($visitLink);
     }

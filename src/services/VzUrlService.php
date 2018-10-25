@@ -14,6 +14,9 @@ use elivz\vzurl\VzUrl;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\UrlHelper;
+
+use GuzzleHttp\TransferStats;
 
 /**
  * VzUrlService Service
@@ -24,9 +27,9 @@ use craft\base\Component;
  *
  * https://craftcms.com/docs/plugins/services
  *
- * @author    Eli Van Zoeren
- * @package   VzUrl
- * @since     2.0.0
+ * @author  Eli Van Zoeren
+ * @package VzUrl
+ * @since   2.0.0
  */
 class VzUrlService extends Component
 {
@@ -34,19 +37,57 @@ class VzUrlService extends Component
     // =========================================================================
 
     /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
+     * Validate a URL
      *
-     * From any other plugin file, call it like this:
-     *
-     *     VzUrl::$plugin->vzUrlService->exampleService()
-     *
-     * @return mixed
+     * @param string $url The URL to check
+     * 
+     * @return array
      */
-    public function exampleService()
+    public function check($url): array
     {
-        $result = 'something';
+        if (empty($url)) {
+            return false;
+        }
 
-        return $result;
+        // Store the original, so we can pass it back in the response
+        $originalUrl = $url;
+        $finalUrl = '';
+
+        try {
+            // Make the request
+            $guzzleClient = Craft::createGuzzleClient(
+                [
+                'base_uri' => UrlHelper::baseSiteUrl(),
+                'timeout' => 15, 
+                'connect_timeout' => 5,
+                'allow_redirects' => ['track_redirects' => true],
+                'headers' => [
+                    'Accept' => 'text/html,*/*',
+                    'Cache-Control' => 'no-cache',
+                    'User-Agent' => 'VzUrl/2.0 (CraftCMS)',
+                ],
+                'verify' => false,
+                'on_stats' => function (TransferStats $stats) use (&$finalUrl) {
+                    $finalUrl = $stats->getEffectiveUri();
+                }
+                ]
+            );
+            $response = $guzzleClient->get($url);
+        } catch (\Exception $e) {
+            return [
+                'original' => $originalUrl,
+                'final_url' => $originalUrl,
+                'http_code' => 0
+            ];
+        }
+
+        // Get the data we need
+        $code = $response->getStatusCode();
+
+        return [
+            'original'  => (string) $originalUrl,
+            'final_url' => (string) $finalUrl,
+            'http_code' => (int) $code
+        ];
     }
 }

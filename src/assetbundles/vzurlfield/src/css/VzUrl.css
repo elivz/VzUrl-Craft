@@ -36,7 +36,7 @@
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0), white);
   }
 
-  .checking::before {
+  &.checking::before {
     content: '';
     position: absolute;
     display: block;
@@ -60,16 +60,21 @@ vzurl-field {
   position: absolute;
   visibility: hidden;
   z-index: 100;
-  left: 3px;
-  top: 30px;
-  padding: 2px 8px;
+  left: 0.25rem;
+  top: 2rem;
+  padding: 0.125rem 0.5rem;
   color: #d7d9db;
-  font-size: 11px;
+  font-size: 0.75rem;
   white-space: nowrap;
   background-color: #333f4d;
   border-radius: 3px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease-in;
+
+  .redirect & {
+    opacity: 1;
+    visibility: visible;
+  }
 
   &:before {
     content: '';
