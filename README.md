@@ -1,6 +1,6 @@
 # VZ URL Fieldtype for Craft
 
-A VZ URL field displays a textbox where the user can enter a URL. It will ping the URL they entered and display an error message if it doesn't find a valid webpage there. It also prompts the user to update URLs that are redirected to a different location.
+A VZ URL field displays a text input where the user can enter a URL. It will ping the URL they entered and display an error message if it doesn't find a valid webpage there. It also prompts the user to update URLs that are redirected to a different location.
 
 ![Screenshot of VZ URL for Craft](resources/img/screenshot.png)
 
