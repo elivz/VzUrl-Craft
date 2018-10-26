@@ -53,6 +53,10 @@
 
 .vzurl-field {
   padding-right: 2rem !important;
+
+  .errors & {
+    border: 1px solid #bd5a0c !important;
+  }
 }
 
 .vzurl-msg {
@@ -71,7 +75,8 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease-in;
 
-  .redirect & {
+  .redirect &,
+  .errors & {
     opacity: 1;
     visibility: visible;
   }
