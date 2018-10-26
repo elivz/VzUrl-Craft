@@ -74,12 +74,22 @@ class VzUrl extends Plugin
             ]
         );
 
-        // Register our fields
+        // Register our field
         Event::on(
             Fields::class,
             Fields::EVENT_REGISTER_FIELD_TYPES,
             function (RegisterComponentTypesEvent $event) {
                 $event->types[] = VzUrlField::class;
+            }
+        );
+        
+        // Register our template variable
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function (Event $event) {
+                $variable = $event->sender;
+                $variable->set('vzUrl', VzUrlVariable::class);
             }
         );
 

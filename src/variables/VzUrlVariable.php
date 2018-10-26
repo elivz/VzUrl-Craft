@@ -22,9 +22,9 @@ use Craft;
  *
  * https://craftcms.com/docs/plugins/variables
  *
- * @author    Eli Van Zoeren
- * @package   VzUrl
- * @since     2.0.0
+ * @author  Eli Van Zoeren
+ * @package VzUrl
+ * @since   2.0.0
  */
 class VzUrlVariable
 {
@@ -32,25 +32,51 @@ class VzUrlVariable
     // =========================================================================
 
     /**
-     * Whatever you want to output to a Twig template can go into a Variable method.
-     * You can have as many variable functions as you want.  From any Twig template,
-     * call it like this:
+     * Run PHP's parseurl() on a url, and add in a few extra variables as well
      *
-     *     {{ craft.vzUrl.exampleVariable }}
-     *
-     * Or, if your variable requires parameters from Twig:
-     *
-     *     {{ craft.vzUrl.exampleVariable(twigValue) }}
-     *
-     * @param null $optional
-     * @return string
+     * @param string $url URL to parse
+     * 
+     * @return array The component parts
      */
-    public function exampleVariable($optional = null)
+    public function parse($url = false)
     {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
+        if (empty($url)) {
+            return false;
         }
-        return $result;
+
+        $data = array_merge(
+            [
+                'scheme' => '',
+                'host' => '',
+                'port' => '',
+                'user' => '',
+                'pass' => '',
+                'path' => '',
+                'query' => '',
+                'params' => [],
+                'fragment' => '',
+                'filetype' => '',
+            ], parse_url($url)
+        );
+
+        if (!empty($data['host'])) {
+            // Add the full root domain
+            $scheme = !empty($data['scheme']) ? $data['scheme'] : 'http';
+            $data['root'] = $scheme . '://' . $data['host'];
+        }
+
+        if (!empty($data['path'])) {
+            // Add the filename extension, if any
+            preg_match('/\/[^\/]+\.(\w+)$/', $url, $matches);
+            if (!empty($matches[1])) {
+                $data['filetype'] = $matches[1];
+            }
+        }
+
+        if (!empty($data['query'])) {
+            parse_str($data['query'], $data['params']);
+        }
+
+        return $data;
     }
 }

@@ -54,6 +54,7 @@ The following components are available:
 - `pass`
 - `path` e.g. /about
 - `query` (without the question mark)
+- `params` an associative array containing any query parameters
 - `fragment` (without the hash)
 - `filetype` e.g. pdf
 
