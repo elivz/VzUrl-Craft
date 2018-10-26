@@ -27,10 +27,10 @@
     content: '';
     position: absolute;
     display: block;
-    width: 10px;
-    height: 18px;
-    top: 6px;
-    right: 30px;
+    width: 1rem;
+    top: 1px;
+    bottom: 1px;
+    right: 2rem;
     z-index: 1;
     pointer-events: none;
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0), white);
@@ -51,8 +51,8 @@
   }
 }
 
-vzurl-field {
-  padding-right: 30px !important;
+.vzurl-field {
+  padding-right: 2rem !important;
 }
 
 .vzurl-msg {
@@ -128,6 +128,7 @@ vzurl-field {
 /* Visit link */
 .vzurl-visit {
   position: absolute;
+  z-index: 5;
   display: block;
   right: 0;
   top: 0;

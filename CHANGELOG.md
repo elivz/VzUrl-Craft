@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
 
-- Initial release
+- Compatibility with Craft 3.
+- The `craft.vzUrl.parse` variable now parses any query string into an associative array.
 
 ## 1.1.1 - 2017-04-24T14:00:00+00:00
 
