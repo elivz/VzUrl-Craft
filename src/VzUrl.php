@@ -53,7 +53,7 @@ class VzUrl extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '2.0.0';
+    public $schemaVersion = '2.1.0';
 
     // Public Methods
     // =========================================================================
