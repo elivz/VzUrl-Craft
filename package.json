@@ -1,7 +1,7 @@
 {
   "name": "vzurl",
   "description": "URL fieldtype for the Craft content management system.",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Eli Van Zoeren <eli@elivz.com>",
   "homepage": "https://elivz.com/",
   "license": "MIT",
